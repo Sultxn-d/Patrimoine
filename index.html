@@ -2,479 +2,178 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#070b14">
 <title>Patrimoine</title>
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUGF0cmltb2luZSIsInNob3J0X25hbWUiOiJQYXRyaW1vaW5lIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwNzBiMTQiLCJ0aGVtZV9jb2xvciI6IiMwNzBiMTQifQ==">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMDBkNGFhIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMDA4NWZmIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIHJ4PSI0MCIgZmlsbD0iIzBhMGUxYSIvPjx0ZXh0IHg9IjkwIiB5PSIxMTUiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iODAiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9InVybCgjZykiIHRleHQtYW5jaG9yPSJtaWRkbGUiPuKCrDwvdGV4dD48L3N2Zz4=">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
---bg:#070b14;--surface:#111827;--surface2:#1a2236;--border:#1e293b;
---accent:#00d4aa;--accent-dim:rgba(0,212,170,.12);
---amber:#f0b429;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--pink:#ec4899;
---text:#e8ecf4;--muted:#64748b;--dim:#475569;
---nav-h:68px;--safe-b:env(safe-area-inset-bottom,0px)
+--bg:#070b14;--surface:#0f1623;--surface2:#182030;--surface3:#1e2a3e;
+--border:#1c2940;--border2:#253552;
+--accent:#00d4aa;--accent2:#00b894;--accent-dim:rgba(0,212,170,.1);--accent-glow:rgba(0,212,170,.25);
+--amber:#f0b429;--red:#ef4444;--red-dim:rgba(239,68,68,.1);--blue:#3b82f6;--purple:#a855f7;--pink:#ec4899;--orange:#f97316;--cyan:#06b6d4;--lime:#84cc16;
+--text:#e8ecf4;--text2:#c0c8d8;--muted:#64748b;--dim:#3d4f6a;
+--nav-h:62px;--top:env(safe-area-inset-top,20px);--bot:env(safe-area-inset-bottom,0px)
 }
-html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter',sans-serif;height:100%;overflow:hidden}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif;height:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
 body{display:flex;flex-direction:column}
-
-/* ── Scrollable area ── */
-#app{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px calc(var(--nav-h) + var(--safe-b) + 12px)}
-
-/* ── Bottom nav ── */
-nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:90}
-nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:var(--muted);font-size:10px;font-weight:500;cursor:pointer;transition:color .2s}
+#top-safe{height:var(--top);background:var(--bg);flex-shrink:0}
+#header{padding:8px 18px 10px;background:var(--bg);flex-shrink:0}
+#header h1{font-size:24px;font-weight:800;letter-spacing:-.5px}
+#header .subtitle{font-size:11px;color:var(--muted);margin-top:1px}
+#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 14px calc(var(--nav-h) + var(--bot) + 14px)}
+#content::-webkit-scrollbar{display:none}
+#content{scrollbar-width:none}
+nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--bot));padding-bottom:var(--bot);background:rgba(15,22,35,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;z-index:90}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--dim);font-size:9.5px;font-weight:600;cursor:pointer;transition:color .2s;letter-spacing:.2px}
 nav button.active{color:var(--accent)}
-nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-
-/* ── Cards ── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
-.card-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
-
-/* ── Stat row ── */
-.stats{display:flex;gap:10px;margin-bottom:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-.stat{flex:0 0 auto;width:calc(50% - 5px);scroll-snap-align:start;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
-.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600}
-.stat-value{font-size:22px;font-weight:700}
-.stat-sub{font-size:11px;color:var(--dim);margin-top:2px}
-
-/* ── Asset rows ── */
-.asset-row{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background .15s}
-.asset-row:active{background:var(--border)}
-.asset-name{font-size:14px;font-weight:500}
-.asset-note{font-size:11px;color:var(--dim);margin-top:1px}
-.asset-val{font-size:14px;font-weight:600;text-align:right}
-
-/* ── Category header ── */
-.cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.cat-left{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+nav button .ico{font-size:20px;height:22px;line-height:22px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:10px}
+.card-title{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.tickers{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;scroll-snap-type:x mandatory}
+.tickers::-webkit-scrollbar{display:none}
+.ticker{flex:0 0 auto;scroll-snap-align:start;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;min-width:120px}
+.ticker-name{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:2px}
+.ticker-price{font-size:16px;font-weight:700}
+.ticker-change{font-size:11px;font-weight:600;margin-top:1px}
+.asset-row{display:flex;justify-content:space-between;align-items:center;padding:13px 14px;background:var(--surface2);border-radius:12px;margin-bottom:6px;cursor:pointer;transition:background .12s;border:1px solid transparent}
+.asset-row:active{background:var(--surface3);border-color:var(--border)}
+.asset-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-right:12px}
+.asset-info{flex:1;min-width:0}
+.asset-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asset-note{font-size:11px;color:var(--muted);margin-top:1px}
+.asset-val{font-size:15px;font-weight:700;text-align:right;white-space:nowrap}
+.asset-perf{font-size:11px;text-align:right;margin-top:1px;font-weight:500}
+.cat-block{margin-bottom:14px}
+.cat-header{display:flex;justify-content:space-between;align-items:center;padding:0 4px;margin-bottom:8px}
+.cat-left{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
 .cat-total{font-weight:700;font-size:15px}
-
-/* ── Buttons ── */
-.btn-primary{width:100%;padding:13px;border-radius:12px;border:none;background:var(--accent);color:var(--bg);font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s}
-.btn-primary:active{opacity:.8}
-.btn-outline{width:100%;padding:13px;border-radius:12px;border:1px solid var(--border);background:none;color:var(--text);font-size:14px;cursor:pointer;text-align:left}
-.btn-outline:active{background:var(--surface2)}
-.btn-danger{border-color:rgba(239,68,68,.3);color:var(--red)}
-.btn-small{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 16px);right:16px;width:54px;height:54px;border-radius:50%;border:none;background:var(--accent);color:var(--bg);font-size:26px;font-weight:400;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,170,.35);z-index:80;display:flex;align-items:center;justify-content:center}
-
-/* ── Modal ── */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:flex;align-items:flex-end;justify-content:center}
-.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px calc(20px + var(--safe-b));width:100%;max-width:500px;max-height:85vh;overflow-y:auto}
-.modal h3{font-size:18px;font-weight:700;margin-bottom:18px}
-.modal label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:500}
-.modal input,.modal select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:15px;outline:none;-webkit-appearance:none;margin-bottom:12px}
-.modal select{cursor:pointer}
-.modal-actions{display:flex;gap:10px;margin-top:6px}
-.modal-actions button{flex:1}
-
-/* ── Donut ── */
-.donut-wrap{display:flex;align-items:center;gap:16px}
-.donut-legend{display:flex;flex-direction:column;gap:5px;flex:1}
+.budget-row{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:5px}
+.budget-cat{display:flex;align-items:center;gap:8px}
+.budget-dot{width:8px;height:8px;border-radius:50%}
+.budget-label{font-size:13px;font-weight:500}
+.budget-amount{font-size:14px;font-weight:600}
+.market-card{display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;cursor:pointer}
+.market-card:active{background:var(--surface2)}
+.market-left{display:flex;align-items:center;gap:12px}
+.market-symbol{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700}
+.market-info h4{font-size:14px;font-weight:600;margin-bottom:1px}
+.market-info span{font-size:11px;color:var(--muted)}
+.market-right{text-align:right}
+.market-price{font-size:16px;font-weight:700}
+.market-pct{font-size:12px;font-weight:600;padding:3px 8px;border-radius:6px;margin-top:3px;display:inline-block}
+.btn{padding:13px;border-radius:14px;border:none;font-size:15px;font-weight:700;cursor:pointer;width:100%;transition:opacity .12s;text-align:center}
+.btn:active{opacity:.8}
+.btn-accent{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg)}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--text)}
+.btn-danger{background:none;border:1px solid rgba(239,68,68,.3);color:var(--red)}
+.btn-sm{padding:8px 16px;font-size:13px;width:auto;border-radius:10px}
+.fab{position:fixed;bottom:calc(var(--nav-h) + var(--bot) + 18px);right:18px;width:52px;height:52px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--bg);font-size:28px;font-weight:300;cursor:pointer;box-shadow:0 4px 24px var(--accent-glow);z-index:80;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.fab:active{transform:scale(.9)}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:flex;align-items:flex-end;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal{background:var(--surface);border-radius:22px 22px 0 0;padding:22px 18px calc(22px + var(--bot));width:100%;max-width:500px;max-height:82vh;overflow-y:auto;animation:slideUp .25s ease-out;margin:0 auto}
+.modal-handle{width:36px;height:4px;background:var(--dim);border-radius:2px;margin:0 auto 16px}
+.modal h3{font-size:19px;font-weight:800;margin-bottom:16px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.field input,.field select{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:15px;outline:none;-webkit-appearance:none;transition:border-color .2s}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.field select{cursor:pointer}
+.modal-btns{display:flex;gap:10px;margin-top:8px}
+.modal-btns .btn{flex:1}
+.progress-bg{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s ease-out}
+.sim-big{font-size:36px;font-weight:800;color:var(--accent)}
+.sim-label{font-size:12px;color:var(--muted);margin-top:4px}
+.empty{text-align:center;padding:40px 10px;color:var(--dim);font-size:13px;line-height:1.5}
+.donut-section{display:flex;align-items:center;gap:14px}
+.legend{display:flex;flex-direction:column;gap:4px;flex:1}
 .legend-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
-.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;margin-right:6px}
-.legend-left{display:flex;align-items:center;color:var(--muted)}
-.legend-pct{color:var(--text);font-weight:600}
-
-/* ── Chart (simple SVG) ── */
-.chart-empty{text-align:center;padding:30px 0;color:var(--dim);font-size:13px}
-
-/* ── Snapshot rows ── */
-.snap-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--border)}
+.legend-dot{width:8px;height:8px;border-radius:2.5px;flex-shrink:0;margin-right:6px}
+.legend-left{display:flex;align-items:center;color:var(--text2)}
+.legend-val{color:var(--text);font-weight:600;font-size:11px}
+.snap-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
 .snap-row:last-child{border-bottom:none}
-.snap-date{color:var(--muted);font-size:13px}
-.snap-right{display:flex;align-items:center;gap:10px}
-.snap-diff{font-size:12px;font-weight:500}
-.snap-total{font-weight:600;font-size:15px}
-
-/* hide scrollbar */
-#app::-webkit-scrollbar{display:none}
-#app{scrollbar-width:none}
+.tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
+.tab.active{background:var(--accent-dim);color:var(--accent);border-color:rgba(0,212,170,.3)}
+.setting-btn{display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;font-weight:500;cursor:pointer;margin-bottom:8px;text-align:left;transition:background .12s}
+.setting-btn:active{background:var(--surface2)}
+.setting-btn .s-ico{font-size:20px}
+.setting-btn.danger{border-color:rgba(239,68,68,.2);color:var(--red)}
 </style>
 </head>
 <body>
-
-<div id="app"></div>
-
+<div id="top-safe"></div>
+<div id="header"><h1 id="page-title">Dashboard</h1><div class="subtitle" id="page-sub"></div></div>
+<div id="content"></div>
 <nav id="nav">
-<button data-view="dashboard" class="active">
-<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-<span>Dashboard</span>
-</button>
-<button data-view="assets">
-<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M12 7v5l3 3"/></svg>
-<span>Actifs</span>
-</button>
-<button data-view="history">
-<svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-<span>Historique</span>
-</button>
-<button data-view="settings">
-<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83"/></svg>
-<span>Réglages</span>
-</button>
+<button data-v="dashboard" class="active"><span class="ico">◉</span>Dashboard</button>
+<button data-v="assets"><span class="ico">◆</span>Actifs</button>
+<button data-v="budget"><span class="ico">▤</span>Budget</button>
+<button data-v="markets"><span class="ico">◈</span>Marchés</button>
+<button data-v="more"><span class="ico">⚙</span>Plus</button>
 </nav>
-
 <script>
-// ─── Data ───
 const CATS=[
-{id:'liquidites',label:'Liquidités',icon:'💶',color:'#00d4aa'},
-{id:'actions',label:'Actions / ETF',icon:'📈',color:'#3b82f6'},
+{id:'courant',label:'Compte courant',icon:'💳',color:'#3b82f6'},
+{id:'livrets',label:'Livrets',icon:'🏦',color:'#06b6d4'},
+{id:'av',label:'Assurance Vie',icon:'🛡️',color:'#8b5cf6'},
+{id:'pea',label:'PEA',icon:'📊',color:'#6366f1'},
+{id:'cto',label:'CTO',icon:'📈',color:'#0ea5e9'},
 {id:'crypto',label:'Crypto',icon:'₿',color:'#f0b429'},
 {id:'immobilier',label:'Immobilier',icon:'🏠',color:'#a855f7'},
-{id:'epargne',label:'Épargne',icon:'🏦',color:'#ec4899'},
-];
-
-function load(){try{return JSON.parse(localStorage.getItem('patrimoine-data'))||{assets:[],snapshots:[]}}catch{return{assets:[],snapshots:[]}}}
-function save(d){localStorage.setItem('patrimoine-data',JSON.stringify(d))}
-function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
-function fmt(n){return (n||0).toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0})+' €'}
-function fmtDate(s){return new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}
+{id:'epargne_sal',label:'Épargne salariale',icon:'🏢',color:'#ec4899'},
+{id:'scpi',label:'SCPI',icon:'🏗️',color:'#f97316'},
+{id:'autres',label:'Autres',icon:'📦',color:'#84cc16'}];
+const BUDGET_CATS={income:['Salaire','Freelance','Dividendes','Remboursements','Autres revenus'],expense:['Loyer','Courses','Transport','Resto/Sorties','Abonnements','Shopping','Santé','Épargne/Invest','Autres dépenses']};
+const BUDGET_COLORS=['#3b82f6','#06b6d4','#8b5cf6','#f0b429','#ec4899','#f97316','#84cc16','#ef4444','#64748b'];
+const CRYPTOS=[
+{id:'bitcoin',sym:'BTC',name:'Bitcoin',color:'#f7931a'},
+{id:'ethereum',sym:'ETH',name:'Ethereum',color:'#627eea'},
+{id:'solana',sym:'SOL',name:'Solana',color:'#9945ff'},
+{id:'ripple',sym:'XRP',name:'XRP',color:'#00aae4'},
+{id:'cardano',sym:'ADA',name:'Cardano',color:'#0033ad'},
+{id:'dogecoin',sym:'DOGE',name:'Dogecoin',color:'#c2a633'},
+{id:'polkadot',sym:'DOT',name:'Polkadot',color:'#e6007a'},
+{id:'chainlink',sym:'LINK',name:'Chainlink',color:'#2a5ada'},
+{id:'avalanche-2',sym:'AVAX',name:'Avalanche',color:'#e84142'},
+{id:'litecoin',sym:'LTC',name:'Litecoin',color:'#bfbbbb'}];
+function load(){try{return JSON.parse(localStorage.getItem('pat-v2'))||df()}catch{return df()}}
+function df(){return{assets:[],snapshots:[],budget:[],objectif:{target:500000,monthly:500}}}
+function save(d){localStorage.setItem('pat-v2',JSON.stringify(d))}
+function gid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function fmt(n){return(n||0).toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0})+' €'}
+function fmtK(n){if(Math.abs(n)>=1e6)return(n/1e6).toFixed(1)+'M €';if(Math.abs(n)>=1e4)return(n/1e3).toFixed(0)+'k €';return fmt(n)}
+function fmtD(s){return new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}
+function fmtDL(s){return new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})}
 function today(){return new Date().toISOString().slice(0,10)}
-function netWorth(d){return d.assets.reduce((s,a)=>s+(a.value||0),0)}
-function catSum(d,cid){return d.assets.filter(a=>a.category===cid).reduce((s,a)=>s+a.value,0)}
-
-let data=load();
-let currentView='dashboard';
-const app=document.getElementById('app');
-
-// ─── Nav ───
-document.querySelectorAll('nav button').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    currentView=btn.dataset.view;
-    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    render();
-    app.scrollTop=0;
-  });
-});
-
-// ─── Render router ───
-function render(){
-  // Remove floating button if exists
-  document.querySelectorAll('.btn-small').forEach(b=>b.remove());
-  document.querySelectorAll('.modal-bg').forEach(m=>m.remove());
-
-  if(currentView==='dashboard') renderDashboard();
-  else if(currentView==='assets') renderAssets();
-  else if(currentView==='history') renderHistory();
-  else if(currentView==='settings') renderSettings();
-}
-
-// ─── Dashboard ───
-function renderDashboard(){
-  const nw=netWorth(data);
-  const snaps=[...(data.snapshots||[])].sort((a,b)=>a.date.localeCompare(b.date));
-  const lastSnap=snaps.length>1?snaps[snaps.length-2].total:null;
-  const diff=lastSnap!==null?nw-lastSnap:null;
-  const pct=lastSnap?((diff/lastSnap)*100).toFixed(1):null;
-
-  let html=`<h2 style="font-size:22px;font-weight:800;margin-bottom:16px">Dashboard</h2>`;
-
-  // Big net worth
-  html+=`<div style="margin-bottom:18px">
-    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:2px">Patrimoine net</div>
-    <div style="font-size:32px;font-weight:800;color:var(--accent)">${fmt(nw)}</div>`;
-  if(diff!==null){
-    const c=diff>=0?'var(--accent)':'var(--red)';
-    const sign=diff>=0?'+':'';
-    html+=`<div style="font-size:13px;color:${c};margin-top:2px;font-weight:500">${sign}${fmt(diff)} (${sign}${pct} %)</div>`;
-  }
-  html+=`</div>`;
-
-  // Allocation donut
-  const cats=CATS.map(c=>({...c,value:catSum(data,c.id)})).filter(c=>c.value>0);
-  if(cats.length>0){
-    html+=`<div class="card"><div class="card-title">Répartition</div><div class="donut-wrap">`;
-    html+=buildDonut(cats,nw);
-    html+=`<div class="donut-legend">`;
-    cats.forEach(c=>{
-      html+=`<div class="legend-row"><div class="legend-left"><div class="legend-dot" style="background:${c.color}"></div>${c.label}</div><span class="legend-pct">${((c.value/nw)*100).toFixed(1)} %</span></div>`;
-    });
-    html+=`</div></div></div>`;
-  }
-
-  // Chart
-  html+=`<div class="card"><div class="card-title">Évolution</div>`;
-  if(snaps.length>1){
-    html+=buildChart(snaps);
-  } else {
-    html+=`<div class="chart-empty">Prends des snapshots dans l'onglet Historique pour voir l'évolution.</div>`;
-  }
-  html+=`</div>`;
-
-  app.innerHTML=html;
-}
-
-function buildDonut(cats,total){
-  const size=110, cx=55, cy=55, r=40, r2=28;
-  let cumul=0;
-  let paths='';
-  cats.forEach(c=>{
-    const frac=c.value/total;
-    const gap=0.01;
-    const start=cumul+gap/2;
-    const end=cumul+frac-gap/2;
-    cumul+=frac;
-    const x1=cx+r*Math.cos(2*Math.PI*start-Math.PI/2);
-    const y1=cy+r*Math.sin(2*Math.PI*start-Math.PI/2);
-    const x2=cx+r*Math.cos(2*Math.PI*end-Math.PI/2);
-    const y2=cy+r*Math.sin(2*Math.PI*end-Math.PI/2);
-    const x3=cx+r2*Math.cos(2*Math.PI*end-Math.PI/2);
-    const y3=cy+r2*Math.sin(2*Math.PI*end-Math.PI/2);
-    const x4=cx+r2*Math.cos(2*Math.PI*start-Math.PI/2);
-    const y4=cy+r2*Math.sin(2*Math.PI*start-Math.PI/2);
-    const large=frac>0.5?1:0;
-    paths+=`<path d="M${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2} L${x3} ${y3} A${r2} ${r2} 0 ${large} 0 ${x4} ${y4} Z" fill="${c.color}"/>`;
-  });
-  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex-shrink:0">${paths}</svg>`;
-}
-
-function buildChart(snaps){
-  const vals=snaps.map(s=>s.total);
-  const min=Math.min(...vals)*0.95;
-  const max=Math.max(...vals)*1.05;
-  const range=max-min||1;
-  const w=320, h=140, px=30, py=10;
-  const cw=w-px*2, ch=h-py*2;
-
-  let points=snaps.map((s,i)=>{
-    const x=px+(i/(snaps.length-1))*cw;
-    const y=py+ch-(((s.total-min)/range)*ch);
-    return `${x},${y}`;
-  });
-
-  const areaPoints=points.join(' ')+` ${px+cw},${py+ch} ${px},${py+ch}`;
-  const linePoints=points.join(' ');
-
-  // Y axis labels
-  let yLabels='';
-  for(let i=0;i<=3;i++){
-    const v=min+(range*i/3);
-    const y=py+ch-(i/3)*ch;
-    yLabels+=`<text x="${px-4}" y="${y+3}" text-anchor="end" fill="#475569" font-size="9">${(v/1000).toFixed(0)}k</text>`;
-    yLabels+=`<line x1="${px}" y1="${y}" x2="${px+cw}" y2="${y}" stroke="#1e293b" stroke-dasharray="3,3"/>`;
-  }
-
-  // X axis
-  let xLabels='';
-  const step=Math.max(1,Math.floor(snaps.length/4));
-  for(let i=0;i<snaps.length;i+=step){
-    const x=px+(i/(snaps.length-1))*cw;
-    const d=new Date(snaps[i].date);
-    xLabels+=`<text x="${x}" y="${h-2}" text-anchor="middle" fill="#475569" font-size="9">${d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})}</text>`;
-  }
-
-  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto">
-    <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d4aa" stop-opacity=".25"/><stop offset="100%" stop-color="#00d4aa" stop-opacity="0"/></linearGradient></defs>
-    ${yLabels}${xLabels}
-    <polygon points="${areaPoints}" fill="url(#ag)"/>
-    <polyline points="${linePoints}" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linejoin="round"/>
-  </svg>`;
-}
-
-// ─── Assets ───
-function renderAssets(){
-  let html=`<h2 style="font-size:22px;font-weight:800;margin-bottom:16px">Mes actifs</h2>`;
-
-  let hasAny=false;
-  CATS.forEach(cat=>{
-    const items=data.assets.filter(a=>a.category===cat.id);
-    if(!items.length) return;
-    hasAny=true;
-    const total=items.reduce((s,a)=>s+a.value,0);
-    html+=`<div class="card">
-      <div class="cat-header"><div class="cat-left"><span style="font-size:20px">${cat.icon}</span>${cat.label}</div>
-      <span class="cat-total" style="color:${cat.color}">${fmt(total)}</span></div>`;
-    items.forEach(a=>{
-      html+=`<div class="asset-row" data-edit="${a.id}">
-        <div><div class="asset-name">${a.name}</div>${a.note?`<div class="asset-note">${a.note}</div>`:''}</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="asset-val">${fmt(a.value)}</span>
-          <span data-del="${a.id}" style="color:var(--red);font-size:18px;padding:4px;cursor:pointer">✕</span>
-        </div>
-      </div>`;
-    });
-    html+=`</div>`;
-  });
-
-  if(!hasAny){
-    html+=`<div class="card"><div class="chart-empty">Aucun actif. Appuie sur + pour commencer.</div></div>`;
-  }
-
-  app.innerHTML=html;
-
-  // FAB
-  const fab=document.createElement('button');
-  fab.className='btn-small';
-  fab.textContent='+';
-  fab.addEventListener('click',()=>openModal());
-  document.body.appendChild(fab);
-
-  // Event delegation
-  app.querySelectorAll('[data-edit]').forEach(el=>{
-    el.addEventListener('click',e=>{
-      if(e.target.closest('[data-del]')) return;
-      const asset=data.assets.find(a=>a.id===el.dataset.edit);
-      if(asset) openModal(asset);
-    });
-  });
-  app.querySelectorAll('[data-del]').forEach(el=>{
-    el.addEventListener('click',e=>{
-      e.stopPropagation();
-      data.assets=data.assets.filter(a=>a.id!==el.dataset.del);
-      save(data);
-      render();
-    });
-  });
-}
-
-function openModal(asset){
-  document.querySelectorAll('.modal-bg').forEach(m=>m.remove());
-  const isEdit=!!asset;
-  const bg=document.createElement('div');
-  bg.className='modal-bg';
-
-  let catOptions=CATS.map(c=>`<option value="${c.id}" ${asset&&asset.category===c.id?'selected':''}>${c.icon} ${c.label}</option>`).join('');
-
-  bg.innerHTML=`<div class="modal">
-    <h3>${isEdit?'Modifier':'Nouvel actif'}</h3>
-    <label>Nom</label>
-    <input id="m-name" placeholder="Livret A, Bitcoin, PEA..." value="${asset?asset.name:''}">
-    <label>Catégorie</label>
-    <select id="m-cat">${catOptions}</select>
-    <label>Valeur (€)</label>
-    <input id="m-val" type="number" inputmode="decimal" placeholder="0" value="${asset?asset.value:''}">
-    <label>Note (optionnel)</label>
-    <input id="m-note" placeholder="Courtier, détails..." value="${asset?asset.note||'':''}">
-    <div class="modal-actions">
-      <button class="btn-outline" id="m-cancel">Annuler</button>
-      <button class="btn-primary" id="m-save">Enregistrer</button>
-    </div>
-    ${isEdit?`<button class="btn-outline btn-danger" style="margin-top:10px" id="m-delete">Supprimer cet actif</button>`:''}
-  </div>`;
-
-  document.body.appendChild(bg);
-  bg.addEventListener('click',e=>{if(e.target===bg){bg.remove()}});
-  bg.querySelector('#m-cancel').addEventListener('click',()=>bg.remove());
-
-  bg.querySelector('#m-save').addEventListener('click',()=>{
-    const name=bg.querySelector('#m-name').value.trim();
-    const val=parseFloat(bg.querySelector('#m-val').value);
-    if(!name||isNaN(val)) return;
-    const cat=bg.querySelector('#m-cat').value;
-    const note=bg.querySelector('#m-note').value.trim();
-    if(isEdit){
-      const idx=data.assets.findIndex(a=>a.id===asset.id);
-      if(idx>=0) data.assets[idx]={...data.assets[idx],name,category:cat,value:val,note,updatedAt:today()};
-    } else {
-      data.assets.push({id:genId(),name,category:cat,value:val,note,createdAt:today(),updatedAt:today()});
-    }
-    save(data);
-    bg.remove();
-    render();
-  });
-
-  if(isEdit){
-    bg.querySelector('#m-delete').addEventListener('click',()=>{
-      data.assets=data.assets.filter(a=>a.id!==asset.id);
-      save(data);
-      bg.remove();
-      render();
-    });
-  }
-}
-
-// ─── History ───
-function renderHistory(){
-  const nw=netWorth(data);
-  const sorted=[...(data.snapshots||[])].sort((a,b)=>b.date.localeCompare(a.date));
-
-  let html=`<h2 style="font-size:22px;font-weight:800;margin-bottom:6px">Historique</h2>
-    <p style="color:var(--dim);font-size:13px;margin-bottom:16px">Prends un snapshot pour figer l'état de ton patrimoine. Le graphique du dashboard se construit avec ces points.</p>
-    <button class="btn-primary" id="snap-btn" style="margin-bottom:18px">Prendre un snapshot (${fmt(nw)})</button>`;
-
-  if(sorted.length){
-    html+=`<div class="card">`;
-    sorted.forEach((s,i)=>{
-      const prev=sorted[i+1];
-      const diff=prev?s.total-prev.total:null;
-      const c=diff!==null?(diff>=0?'var(--accent)':'var(--red)'):'';
-      const sign=diff!==null&&diff>=0?'+':'';
-      html+=`<div class="snap-row">
-        <span class="snap-date">${fmtDate(s.date)}</span>
-        <div class="snap-right">
-          ${diff!==null?`<span class="snap-diff" style="color:${c}">${sign}${fmt(diff)}</span>`:''}
-          <span class="snap-total">${fmt(s.total)}</span>
-        </div>
-      </div>`;
-    });
-    html+=`</div>`;
-  } else {
-    html+=`<div class="card"><div class="chart-empty">Aucun snapshot pour le moment.</div></div>`;
-  }
-
-  app.innerHTML=html;
-
-  document.getElementById('snap-btn').addEventListener('click',()=>{
-    const t=today();
-    const snap={date:t,total:nw,breakdown:CATS.map(c=>({id:c.id,value:catSum(data,c.id)}))};
-    const idx=(data.snapshots||[]).findIndex(s=>s.date===t);
-    if(!data.snapshots) data.snapshots=[];
-    if(idx>=0) data.snapshots[idx]=snap;
-    else data.snapshots.push(snap);
-    save(data);
-    render();
-  });
-}
-
-// ─── Settings ───
-function renderSettings(){
-  let html=`<h2 style="font-size:22px;font-weight:800;margin-bottom:16px">Réglages</h2>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="btn-outline" id="s-export">📤  Exporter (JSON)</button>
-      <button class="btn-outline" id="s-import">📥  Importer</button>
-      <button class="btn-outline btn-danger" id="s-reset">🗑  Tout réinitialiser</button>
-    </div>
-    <div style="margin-top:30px;text-align:center;color:var(--dim);font-size:11px">Patrimoine Tracker v1<br>Données stockées localement sur ton appareil.</div>`;
-
-  app.innerHTML=html;
-
-  document.getElementById('s-export').addEventListener('click',()=>{
-    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    a.download=`patrimoine-${today()}.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
-  });
-
-  document.getElementById('s-import').addEventListener('click',()=>{
-    const input=document.createElement('input');
-    input.type='file';input.accept='.json';
-    input.onchange=e=>{
-      const f=e.target.files[0];if(!f)return;
-      f.text().then(t=>{
-        try{
-          const d=JSON.parse(t);
-          if(d.assets&&Array.isArray(d.assets)){data=d;save(data);render();}
-        }catch{alert('Fichier invalide.')}
-      });
-    };
-    input.click();
-  });
-
-  document.getElementById('s-reset').addEventListener('click',()=>{
-    if(confirm('Supprimer toutes les données ?')){
-      data={assets:[],snapshots:[]};save(data);render();
-    }
-  });
-}
-
-// ─── Init ───
-render();
+function thisMonth(){return today().slice(0,7)}
+function nw(d){return d.assets.reduce((s,a)=>s+(a.value||0),0)}
+function catSum(d,c){return d.assets.filter(a=>a.category===c).reduce((s,a)=>s+a.value,0)}
+let D=load(),V='dashboard',marketData=null,moreTab='history';
+const $c=document.getElementById('content'),$t=document.getElementById('page-title'),$s=document.getElementById('page-sub');
+document.querySelectorAll('nav button').forEach(b=>{b.addEventListener('click',()=>{V=b.dataset.v;document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();$c.scrollTop=0})});
+function render(){document.querySelectorAll('.fab,.modal-bg').forEach(e=>e.remove());const t={dashboard:'Dashboard',assets:'Mes actifs',budget:'Budget',markets:'Marchés',more:'Plus'};$t.textContent=t[V]||'';$s.textContent=V==='dashboard'?fmtDL(today()):'';({dashboard:rDash,assets:rAssets,budget:rBudget,markets:rMarkets,more:rMore})[V]()}
+function rDash(){const total=nw(D);const snaps=[...(D.snapshots||[])].sort((a,b)=>a.date.localeCompare(b.date));const prev=snaps.length>1?snaps[snaps.length-2].total:null;const diff=prev!==null?total-prev:null;const pct=prev?((diff/prev)*100).toFixed(1):null;let h=`<div class="card" style="background:linear-gradient(135deg,rgba(0,212,170,.08),rgba(0,133,255,.05));border-color:rgba(0,212,170,.15)"><div style="font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Patrimoine net</div><div style="font-size:34px;font-weight:800;color:var(--accent);letter-spacing:-1px">${fmt(total)}</div>`;if(diff!==null){const c=diff>=0?'var(--accent)':'var(--red)';h+=`<div style="font-size:13px;color:${c};margin-top:4px;font-weight:600">${diff>=0?'+':''}${fmt(diff)} (${diff>=0?'+':''}${pct} %)</div>`}h+=`</div>`;h+=`<div class="tickers" id="tickers">`;if(marketData){['bitcoin','ethereum','solana'].forEach(id=>{const cr=CRYPTOS.find(c=>c.id===id);const md=marketData[id];if(!cr||!md)return;const ch=md.eur_24h_change;const cc=ch>=0?'var(--accent)':'var(--red)';h+=`<div class="ticker"><div class="ticker-name">${cr.sym}</div><div class="ticker-price">${md.eur.toLocaleString('fr-FR')} €</div><div class="ticker-change" style="color:${cc}">${ch>=0?'+':''}${ch.toFixed(1)} %</div></div>`})}else{h+=`<div class="ticker" style="min-width:200px"><div class="ticker-name">Chargement...</div><div class="ticker-price" style="font-size:12px;color:var(--dim)">CoinGecko</div></div>`}h+=`</div>`;const cats=CATS.map(c=>({...c,value:catSum(D,c.id)})).filter(c=>c.value>0);if(cats.length>0){h+=`<div class="card"><div class="card-title">Répartition</div><div class="donut-section">${buildDonut(cats,total,100)}<div class="legend">`;cats.forEach(c=>{h+=`<div class="legend-row"><div class="legend-left"><div class="legend-dot" style="background:${c.color}"></div>${c.label}</div><span class="legend-val">${((c.value/total)*100).toFixed(0)}% ${fmtK(c.value)}</span></div>`});h+=`</div></div></div>`}h+=`<div class="card"><div class="card-title">Évolution</div>`;if(snaps.length>1)h+=buildChart(snaps);else h+=`<div class="empty">Prends des snapshots pour voir l'évolution.</div>`;h+=`</div>`;const m=thisMonth();const mB=(D.budget||[]).filter(b=>b.date&&b.date.startsWith(m));const inc=mB.filter(b=>b.type==='income').reduce((s,b)=>s+b.amount,0);const exp=mB.filter(b=>b.type==='expense').reduce((s,b)=>s+b.amount,0);h+=`<div class="card"><div class="card-title">Budget du mois</div><div style="display:flex;gap:10px"><div style="flex:1;background:var(--accent-dim);border-radius:12px;padding:12px;text-align:center"><div style="font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Revenus</div><div style="font-size:20px;font-weight:700;color:var(--accent)">+${fmtK(inc)}</div></div><div style="flex:1;background:var(--red-dim);border-radius:12px;padding:12px;text-align:center"><div style="font-size:10px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Dépenses</div><div style="font-size:20px;font-weight:700;color:var(--red)">-${fmtK(exp)}</div></div></div><div style="margin-top:10px;text-align:center;font-size:13px;color:var(--text2);font-weight:600">Cashflow : <span style="color:${inc-exp>=0?'var(--accent)':'var(--red)'}"> ${inc-exp>=0?'+':''}${fmt(inc-exp)}</span></div></div>`;const obj=D.objectif||{target:500000,monthly:500};const pctO=Math.min((total/obj.target)*100,100);h+=`<div class="card"><div class="card-title">Objectif patrimonial</div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span style="color:var(--text2);font-weight:500">${fmtK(total)}</span><span style="color:var(--muted)">${fmtK(obj.target)}</span></div><div class="progress-bg"><div class="progress-fill" style="width:${pctO}%;background:linear-gradient(90deg,var(--accent),var(--blue))"></div></div><div style="text-align:center;margin-top:6px;font-size:12px;color:var(--muted)">${pctO.toFixed(1)} % atteint</div></div>`;$c.innerHTML=h;if(!marketData)fetchMarkets()}
+function rAssets(){let h='',has=false;CATS.forEach(cat=>{const items=D.assets.filter(a=>a.category===cat.id);if(!items.length)return;has=true;const total=items.reduce((s,a)=>s+a.value,0);h+=`<div class="cat-block"><div class="cat-header"><div class="cat-left"><span style="font-size:20px">${cat.icon}</span>${cat.label}</div><span class="cat-total" style="color:${cat.color}">${fmt(total)}</span></div>`;items.forEach(a=>{h+=`<div class="asset-row" data-edit="${a.id}"><div class="asset-icon" style="background:${cat.color}15;color:${cat.color}">${cat.icon}</div><div class="asset-info"><div class="asset-name">${a.name}</div>${a.note?`<div class="asset-note">${a.note}</div>`:''}</div><div><div class="asset-val">${fmt(a.value)}</div>${a.perf?`<div class="asset-perf" style="color:${a.perf>=0?'var(--accent)':'var(--red)'}"> ${a.perf>=0?'+':''}${a.perf.toFixed(1)} %</div>`:''}</div></div>`});h+=`</div>`});if(!has)h+=`<div class="card"><div class="empty">Aucun actif pour le moment.<br>Appuie sur + pour ajouter ton premier actif.</div></div>`;$c.innerHTML=h;addFab(()=>openAssetModal());$c.querySelectorAll('[data-edit]').forEach(el=>el.addEventListener('click',()=>{const a=D.assets.find(x=>x.id===el.dataset.edit);if(a)openAssetModal(a)}))}
+function rBudget(){const m=thisMonth();const items=(D.budget||[]).filter(b=>b.date&&b.date.startsWith(m));const inc=items.filter(b=>b.type==='income').reduce((s,b)=>s+b.amount,0);const exp=items.filter(b=>b.type==='expense').reduce((s,b)=>s+b.amount,0);let h=`<div style="display:flex;gap:8px;margin-bottom:14px"><div style="flex:1;background:var(--accent-dim);border-radius:14px;padding:14px;text-align:center"><div style="font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.5px">Revenus</div><div style="font-size:24px;font-weight:800;color:var(--accent);margin-top:2px">+${fmtK(inc)}</div></div><div style="flex:1;background:var(--red-dim);border-radius:14px;padding:14px;text-align:center"><div style="font-size:10px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.5px">Dépenses</div><div style="font-size:24px;font-weight:800;color:var(--red);margin-top:2px">-${fmtK(exp)}</div></div></div>`;h+=`<div style="text-align:center;font-size:15px;font-weight:700;margin-bottom:14px">Cashflow : <span style="color:${inc-exp>=0?'var(--accent)':'var(--red)'}"> ${inc-exp>=0?'+':''}${fmt(inc-exp)}</span></div>`;if(items.filter(b=>b.type==='expense').length>0){h+=`<div class="card"><div class="card-title">Dépenses par catégorie</div>`;const byCat={};items.filter(b=>b.type==='expense').forEach(b=>{byCat[b.cat]=(byCat[b.cat]||0)+b.amount});Object.entries(byCat).sort((a,b)=>b[1]-a[1]).forEach(([cat,val],i)=>{const pct=exp>0?((val/exp)*100).toFixed(0):0;h+=`<div class="budget-row"><div class="budget-cat"><div class="budget-dot" style="background:${BUDGET_COLORS[i%BUDGET_COLORS.length]}"></div><span class="budget-label">${cat}</span></div><div><span class="budget-amount" style="color:var(--red)">-${fmt(val)}</span><span style="font-size:11px;color:var(--muted);margin-left:6px">${pct}%</span></div></div>`});h+=`</div>`}h+=`<div class="card"><div class="card-title">Transactions récentes</div>`;const sorted=[...items].sort((a,b)=>b.date.localeCompare(a.date));if(sorted.length>0){sorted.slice(0,20).forEach(b=>{const isI=b.type==='income';h+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:13px;font-weight:500">${b.label||b.cat}</div><div style="font-size:11px;color:var(--muted)">${fmtD(b.date)} · ${b.cat}</div></div><span style="font-size:14px;font-weight:600;color:${isI?'var(--accent)':'var(--red)'}"> ${isI?'+':'-'}${fmt(b.amount)}</span></div>`})}else h+=`<div class="empty">Aucune transaction ce mois.</div>`;h+=`</div>`;$c.innerHTML=h;addFab(()=>openBudgetModal())}
+function rMarkets(){let h=`<div style="margin-bottom:12px;font-size:13px;color:var(--muted)">Cours en direct via CoinGecko</div><button class="btn btn-outline btn-sm" id="rfr" style="margin-bottom:14px;width:auto;display:inline-block">↻ Actualiser</button>`;if(marketData){CRYPTOS.forEach(cr=>{const md=marketData[cr.id];if(!md)return;const ch=md.eur_24h_change||0;const cc=ch>=0?'var(--accent)':'var(--red)';const bg=ch>=0?'rgba(0,212,170,.1)':'rgba(239,68,68,.1)';h+=`<div class="market-card" onclick="window.open('https://www.coingecko.com/fr/pi%C3%A8ces/${cr.id}','_blank')"><div class="market-left"><div class="market-symbol" style="background:${cr.color}20;color:${cr.color}">${cr.sym.slice(0,1)}</div><div class="market-info"><h4>${cr.name}</h4><span>${cr.sym}</span></div></div><div class="market-right"><div class="market-price">${md.eur.toLocaleString('fr-FR',{maximumFractionDigits:2})} €</div><div class="market-pct" style="background:${bg};color:${cc}">${ch>=0?'+':''}${ch.toFixed(2)} %</div></div></div>`})}else{h+=`<div class="card"><div class="empty">Chargement des cours...</div></div>`;fetchMarkets()}h+=`<div style="margin-top:16px;text-align:center;font-size:11px;color:var(--dim)">Appuie sur une crypto pour voir le détail</div>`;$c.innerHTML=h;const rb=document.getElementById('rfr');if(rb)rb.addEventListener('click',()=>{marketData=null;fetchMarkets();rb.textContent='...'})}
+function rMore(){let h=`<div class="tabs"><button class="tab ${moreTab==='history'?'active':''}" data-mt="history">Historique</button><button class="tab ${moreTab==='objectif'?'active':''}" data-mt="objectif">Objectif</button><button class="tab ${moreTab==='settings'?'active':''}" data-mt="settings">Réglages</button></div>`;if(moreTab==='history'){const total=nw(D);h+=`<button class="btn btn-accent" id="snap-btn" style="margin-bottom:14px">📸 Snapshot (${fmt(total)})</button>`;const sorted=[...(D.snapshots||[])].sort((a,b)=>b.date.localeCompare(a.date));if(sorted.length){h+=`<div class="card">`;sorted.forEach((s,i)=>{const prev=sorted[i+1];const diff=prev?s.total-prev.total:null;const c=diff!==null?(diff>=0?'var(--accent)':'var(--red)'):'';h+=`<div class="snap-row"><span style="font-size:13px;color:var(--muted)">${fmtDL(s.date)}</span><div style="display:flex;gap:10px;align-items:center">${diff!==null?`<span style="font-size:12px;font-weight:600;color:${c}">${diff>=0?'+':''}${fmt(diff)}</span>`:''}<span style="font-size:15px;font-weight:700">${fmt(s.total)}</span></div></div>`});h+=`</div>`}else h+=`<div class="card"><div class="empty">Aucun snapshot.</div></div>`}if(moreTab==='objectif'){const obj=D.objectif||{target:500000,monthly:500};const total=nw(D);const remain=Math.max(obj.target-total,0);const months=obj.monthly>0?Math.ceil(remain/obj.monthly):Infinity;const years=Math.floor(months/12);const mo=months%12;h+=`<div class="card" style="text-align:center;padding:24px 16px"><div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Indépendance financière</div><div class="sim-big">${years>99?'99+':years} ans${mo>0?' '+mo+' mois':''}</div><div class="sim-label">à ${fmt(obj.monthly)}/mois d'épargne</div><div style="margin-top:14px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text2)">${fmtK(total)}</span><span style="color:var(--muted)">Objectif : ${fmtK(obj.target)}</span></div><div class="progress-bg" style="height:10px"><div class="progress-fill" style="width:${Math.min((total/obj.target)*100,100)}%;background:linear-gradient(90deg,var(--accent),var(--blue))"></div></div></div></div>`;h+=`<div class="card"><div class="card-title">Paramètres</div><div class="field"><label>Objectif (€)</label><input type="number" id="obj-target" value="${obj.target}" inputmode="numeric"></div><div class="field"><label>Épargne mensuelle (€)</label><input type="number" id="obj-monthly" value="${obj.monthly}" inputmode="numeric"></div><button class="btn btn-accent" id="obj-save">Enregistrer</button></div>`}if(moreTab==='settings'){h+=`<button class="setting-btn" id="s-export"><span class="s-ico">📤</span>Exporter (JSON)</button><button class="setting-btn" id="s-import"><span class="s-ico">📥</span>Importer</button><button class="setting-btn danger" id="s-reset"><span class="s-ico">🗑</span>Tout réinitialiser</button><div style="margin-top:30px;text-align:center;color:var(--dim);font-size:11px;line-height:1.6">Patrimoine Tracker v2<br>Données locales · Cours via CoinGecko</div>`}$c.innerHTML=h;$c.querySelectorAll('[data-mt]').forEach(b=>b.addEventListener('click',()=>{moreTab=b.dataset.mt;rMore();$c.scrollTop=0}));const sb=document.getElementById('snap-btn');if(sb)sb.addEventListener('click',()=>{const t=today(),total=nw(D);const snap={date:t,total,breakdown:CATS.map(c=>({id:c.id,value:catSum(D,c.id)}))};if(!D.snapshots)D.snapshots=[];const idx=D.snapshots.findIndex(s=>s.date===t);if(idx>=0)D.snapshots[idx]=snap;else D.snapshots.push(snap);save(D);rMore()});const os=document.getElementById('obj-save');if(os)os.addEventListener('click',()=>{D.objectif={target:parseFloat(document.getElementById('obj-target').value)||500000,monthly:parseFloat(document.getElementById('obj-monthly').value)||500};save(D);rMore()});const se=document.getElementById('s-export');if(se)se.addEventListener('click',()=>{const b=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`patrimoine-${today()}.json`;a.click()});const si=document.getElementById('s-import');if(si)si.addEventListener('click',()=>{const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const d=JSON.parse(t);if(d.assets){D=d;save(D);render()}}catch{alert('Fichier invalide.')}})};inp.click()});const sr=document.getElementById('s-reset');if(sr)sr.addEventListener('click',()=>{if(confirm('Supprimer toutes les données ?')){D=df();save(D);render()}})}
+function openAssetModal(asset){closeModals();const ed=!!asset;const bg=document.createElement('div');bg.className='modal-bg';let co=CATS.map(c=>`<option value="${c.id}" ${asset&&asset.category===c.id?'selected':''}>${c.icon} ${c.label}</option>`).join('');bg.innerHTML=`<div class="modal"><div class="modal-handle"></div><h3>${ed?'Modifier':'Nouvel actif'}</h3><div class="field"><label>Nom</label><input id="m-name" placeholder="Livret A, ETF World, BTC..." value="${asset?asset.name:''}"></div><div class="field"><label>Catégorie</label><select id="m-cat">${co}</select></div><div class="field"><label>Valeur actuelle (€)</label><input id="m-val" type="number" inputmode="decimal" placeholder="0" value="${asset?asset.value:''}"></div><div class="field"><label>Performance % (optionnel)</label><input id="m-perf" type="number" inputmode="decimal" step="0.1" placeholder="ex: 12.5" value="${asset&&asset.perf?asset.perf:''}"></div><div class="field"><label>Note (optionnel)</label><input id="m-note" placeholder="Courtier, ISIN..." value="${asset?asset.note||'':''}"></div><div class="modal-btns"><button class="btn btn-outline" id="m-cancel">Annuler</button><button class="btn btn-accent" id="m-save">Enregistrer</button></div>${ed?`<button class="btn btn-danger" style="margin-top:10px" id="m-del">Supprimer</button>`:''}</div>`;document.body.appendChild(bg);bg.addEventListener('click',e=>{if(e.target===bg)bg.remove()});bg.querySelector('#m-cancel').addEventListener('click',()=>bg.remove());bg.querySelector('#m-save').addEventListener('click',()=>{const name=bg.querySelector('#m-name').value.trim();const val=parseFloat(bg.querySelector('#m-val').value);if(!name||isNaN(val))return;const cat=bg.querySelector('#m-cat').value;const note=bg.querySelector('#m-note').value.trim();const perf=parseFloat(bg.querySelector('#m-perf').value)||null;if(ed){const i=D.assets.findIndex(a=>a.id===asset.id);if(i>=0)D.assets[i]={...D.assets[i],name,category:cat,value:val,note,perf,updatedAt:today()}}else D.assets.push({id:gid(),name,category:cat,value:val,note,perf,createdAt:today(),updatedAt:today()});save(D);bg.remove();render()});if(ed){bg.querySelector('#m-del').addEventListener('click',()=>{D.assets=D.assets.filter(a=>a.id!==asset.id);save(D);bg.remove();render()})}}
+function openBudgetModal(){closeModals();const bg=document.createElement('div');bg.className='modal-bg';let eo=BUDGET_CATS.expense.map(c=>`<option value="${c}">${c}</option>`).join('');bg.innerHTML=`<div class="modal"><div class="modal-handle"></div><h3>Nouvelle transaction</h3><div class="field"><label>Type</label><select id="b-type"><option value="expense">Dépense</option><option value="income">Revenu</option></select></div><div class="field"><label>Catégorie</label><select id="b-cat">${eo}</select></div><div class="field"><label>Libellé (optionnel)</label><input id="b-label" placeholder="Netflix, Courses..."></div><div class="field"><label>Montant (€)</label><input id="b-amount" type="number" inputmode="decimal" placeholder="0"></div><div class="field"><label>Date</label><input id="b-date" type="date" value="${today()}"></div><div class="modal-btns"><button class="btn btn-outline" id="b-cancel">Annuler</button><button class="btn btn-accent" id="b-save">Ajouter</button></div></div>`;document.body.appendChild(bg);const ts=bg.querySelector('#b-type'),cs=bg.querySelector('#b-cat');ts.addEventListener('change',()=>{const o=ts.value==='income'?BUDGET_CATS.income:BUDGET_CATS.expense;cs.innerHTML=o.map(c=>`<option value="${c}">${c}</option>`).join('')});bg.addEventListener('click',e=>{if(e.target===bg)bg.remove()});bg.querySelector('#b-cancel').addEventListener('click',()=>bg.remove());bg.querySelector('#b-save').addEventListener('click',()=>{const amount=parseFloat(bg.querySelector('#b-amount').value);if(!amount||isNaN(amount))return;if(!D.budget)D.budget=[];D.budget.push({id:gid(),type:ts.value,cat:cs.value,label:bg.querySelector('#b-label').value.trim(),amount,date:bg.querySelector('#b-date').value});save(D);bg.remove();render()})}
+function closeModals(){document.querySelectorAll('.modal-bg').forEach(m=>m.remove())}
+function addFab(fn){document.querySelectorAll('.fab').forEach(f=>f.remove());const f=document.createElement('button');f.className='fab';f.textContent='+';f.addEventListener('click',fn);document.body.appendChild(f)}
+function buildDonut(cats,total,size){const s=size,cx=s/2,cy=s/2,r=s*.4,r2=s*.26;let cumul=0,paths='';cats.forEach(c=>{const frac=c.value/total;if(frac<=0)return;const gap=.008,start=cumul+gap/2,end=cumul+frac-gap/2;cumul+=frac;const a1=2*Math.PI*start-Math.PI/2,a2=2*Math.PI*end-Math.PI/2;paths+=`<path d="M${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} A${r} ${r} 0 ${frac>.5?1:0} 1 ${cx+r*Math.cos(a2)} ${cy+r*Math.sin(a2)} L${cx+r2*Math.cos(a2)} ${cy+r2*Math.sin(a2)} A${r2} ${r2} 0 ${frac>.5?1:0} 0 ${cx+r2*Math.cos(a1)} ${cy+r2*Math.sin(a1)}Z" fill="${c.color}"/>`});return`<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" style="flex-shrink:0">${paths}</svg>`}
+function buildChart(snaps){const vals=snaps.map(s=>s.total);const min=Math.min(...vals)*.95,max=Math.max(...vals)*1.05,range=max-min||1;const w=340,h=150,px=34,py=10,cw=w-px*2,ch=h-py*2;let pts=snaps.map((s,i)=>`${px+(i/(snaps.length-1))*cw},${py+ch-((s.total-min)/range)*ch}`);let yL='';for(let i=0;i<=3;i++){const v=min+(range*i/3),y=py+ch-(i/3)*ch;yL+=`<text x="${px-4}" y="${y+3}" text-anchor="end" fill="#3d4f6a" font-size="9">${(v/1000).toFixed(0)}k</text><line x1="${px}" y1="${y}" x2="${px+cw}" y2="${y}" stroke="#1c2940" stroke-dasharray="3,3"/>`}let xL='';const step=Math.max(1,Math.floor(snaps.length/4));for(let i=0;i<snaps.length;i+=step){xL+=`<text x="${px+(i/(snaps.length-1))*cw}" y="${h-1}" text-anchor="middle" fill="#3d4f6a" font-size="9">${fmtD(snaps[i].date)}</text>`}return`<svg viewBox="0 0 ${w} ${h}" style="width:100%"><defs><linearGradient id="ag2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d4aa" stop-opacity=".2"/><stop offset="100%" stop-color="#00d4aa" stop-opacity="0"/></linearGradient></defs>${yL}${xL}<polygon points="${pts.join(' ')} ${px+cw},${py+ch} ${px},${py+ch}" fill="url(#ag2)"/><polyline points="${pts.join(' ')}" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>`}
+function fetchMarkets(){const ids=CRYPTOS.map(c=>c.id).join(',');fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=eur&include_24hr_change=true`).then(r=>r.json()).then(d=>{marketData=d;if(V==='dashboard')rDash();if(V==='markets')rMarkets()}).catch(()=>{})}
+fetchMarkets();render();
 </script>
 </body>
 </html>
