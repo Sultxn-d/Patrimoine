@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#070b14">
+<title>Patrimoine</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUGF0cmltb2luZSIsInNob3J0X25hbWUiOiJQYXRyaW1vaW5lIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwNzBiMTQiLCJ0aGVtZV9jb2xvciI6IiMwNzBiMTQifQ==">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+--bg:#070b14;--surface:#111827;--surface2:#1a2236;--border:#1e293b;
+--accent:#00d4aa;--accent-dim:rgba(0,212,170,.12);
+--amber:#f0b429;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--pink:#ec4899;
+--text:#e8ecf4;--muted:#64748b;--dim:#475569;
+--nav-h:68px;--safe-b:env(safe-area-inset-bottom,0px)
+}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter',sans-serif;height:100%;overflow:hidden}
+body{display:flex;flex-direction:column}
+
+/* ── Scrollable area ── */
+#app{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px calc(var(--nav-h) + var(--safe-b) + 12px)}
+
+/* ── Bottom nav ── */
+nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav-h) + var(--safe-b));padding-bottom:var(--safe-b);background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:90}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;color:var(--muted);font-size:10px;font-weight:500;cursor:pointer;transition:color .2s}
+nav button.active{color:var(--accent)}
+nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+
+/* ── Stat row ── */
+.stats{display:flex;gap:10px;margin-bottom:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.stat{flex:0 0 auto;width:calc(50% - 5px);scroll-snap-align:start;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600}
+.stat-value{font-size:22px;font-weight:700}
+.stat-sub{font-size:11px;color:var(--dim);margin-top:2px}
+
+/* ── Asset rows ── */
+.asset-row{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background .15s}
+.asset-row:active{background:var(--border)}
+.asset-name{font-size:14px;font-weight:500}
+.asset-note{font-size:11px;color:var(--dim);margin-top:1px}
+.asset-val{font-size:14px;font-weight:600;text-align:right}
+
+/* ── Category header ── */
+.cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cat-left{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+.cat-total{font-weight:700;font-size:15px}
+
+/* ── Buttons ── */
+.btn-primary{width:100%;padding:13px;border-radius:12px;border:none;background:var(--accent);color:var(--bg);font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-primary:active{opacity:.8}
+.btn-outline{width:100%;padding:13px;border-radius:12px;border:1px solid var(--border);background:none;color:var(--text);font-size:14px;cursor:pointer;text-align:left}
+.btn-outline:active{background:var(--surface2)}
+.btn-danger{border-color:rgba(239,68,68,.3);color:var(--red)}
+.btn-small{position:fixed;bottom:calc(var(--nav-h) + var(--safe-b) + 16px);right:16px;width:54px;height:54px;border-radius:50%;border:none;background:var(--accent);color:var(--bg);font-size:26px;font-weight:400;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,170,.35);z-index:80;display:flex;align-items:center;justify-content:center}
+
+/* ── Modal ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px calc(20px + var(--safe-b));width:100%;max-width:500px;max-height:85vh;overflow-y:auto}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:18px}
+.modal label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:500}
+.modal input,.modal select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:15px;outline:none;-webkit-appearance:none;margin-bottom:12px}
+.modal select{cursor:pointer}
+.modal-actions{display:flex;gap:10px;margin-top:6px}
+.modal-actions button{flex:1}
+
+/* ── Donut ── */
+.donut-wrap{display:flex;align-items:center;gap:16px}
+.donut-legend{display:flex;flex-direction:column;gap:5px;flex:1}
+.legend-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;margin-right:6px}
+.legend-left{display:flex;align-items:center;color:var(--muted)}
+.legend-pct{color:var(--text);font-weight:600}
+
+/* ── Chart (simple SVG) ── */
+.chart-empty{text-align:center;padding:30px 0;color:var(--dim);font-size:13px}
+
+/* ── Snapshot rows ── */
+.snap-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--border)}
+.snap-row:last-child{border-bottom:none}
+.snap-date{color:var(--muted);font-size:13px}
+.snap-right{display:flex;align-items:center;gap:10px}
+.snap-diff{font-size:12px;font-weight:500}
+.snap-total{font-weight:600;font-size:15px}
+
+/* hide scrollbar */
+#app::-webkit-scrollbar{display:none}
+#app{scrollbar-width:none}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<nav id="nav">
+<button data-view="dashboard" class="active">
+<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+<span>Dashboard</span>
+</button>
+<button data-view="assets">
+<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M12 7v5l3 3"/></svg>
+<span>Actifs</span>
+</button>
+<button data-view="history">
+<svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+<span>Historique</span>
+</button>
+<button data-view="settings">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4M4.22 4.22l2.83 2.83m9.9 9.9l2.83 2.83M1 12h4m14 0h4M4.22 19.78l2.83-2.83m9.9-9.9l2.83-2.83"/></svg>
+<span>Réglages</span>
+</button>
+</nav>
+
+<script>
+// ─── Data ───
+const CATS=[
+{id:'liquidites',label:'Liquidités',icon:'💶',color:'#00d4aa'},
+{id:'actions',label:'Actions / ETF',icon:'📈',color:'#3b82f6'},
+{id:'crypto',label:'Crypto',icon:'₿',color:'#f0b429'},
+{id:'immobilier',label:'Immobilier',icon:'🏠',color:'#a855f7'},
+{id:'epargne',label:'Épargne',icon:'🏦',color:'#ec4899'},
+];
+
+function load(){try{return JSON.parse(localStorage.getItem('patrimoine-data'))||{assets:[],snapshots:[]}}catch{return{assets:[],snapshots:[]}}}
+function save(d){localStorage.setItem('patrimoine-data',JSON.stringify(d))}
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function fmt(n){return (n||0).toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:0})+' €'}
+function fmtDate(s){return new Date(s).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'})}
+function today(){return new Date().toISOString().slice(0,10)}
+function netWorth(d){return d.assets.reduce((s,a)=>s+(a.value||0),0)}
+function catSum(d,cid){return d.assets.filter(a=>a.category===cid).reduce((s,a)=>s+a.value,0)}
+
+let data=load();
+let currentView='dashboard';
+const app=document.getElementById('app');
+
+// ─── Nav ───
+document.querySelectorAll('nav button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    currentView=btn.dataset.view;
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+    app.scrollTop=0;
+  });
+});
+
+// ─── Render router ───
+function render(){
+  // Remove floating button if exists
+  document.querySelectorAll('.btn-small').forEach(b=>b.remove());
+  document.querySelectorAll('.modal-bg').forEach(m=>m.remove());
+
+  if(currentView==='dashboard') renderDashboard();
+  else if(currentView==='assets') renderAssets();
+  else if(currentView==='history') renderHistory();
+  else if(currentView==='settings') renderSettings();
+}
+
+// ─── Dashboard ───
+function renderDashboard(){
+  const nw=netWorth(data);
+  const snaps=[...(data.snapshots||[])].sort((a,b)=>a.date.localeCompare(b.date));
+  const lastSnap=snaps.length>1?snaps[snaps.length-2].total:null;
+  const diff=lastSnap!==null?nw-lastSnap:null;
+  const pct=lastSnap?((diff/lastSnap)*100).toFixed(1):null;
+
+  let html=`<h2 style="font-size:22px;font-weight:800;margin-bottom:16px">Dashboard</h2>`;
+
+  // Big net worth
+  html+=`<div style="margin-bottom:18px">
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:2px">Patrimoine net</div>
+    <div style="font-size:32px;font-weight:800;color:var(--accent)">${fmt(nw)}</div>`;
+  if(diff!==null){
+    const c=diff>=0?'var(--accent)':'var(--red)';
+    const sign=diff>=0?'+':'';
+    html+=`<div style="font-size:13px;color:${c};margin-top:2px;font-weight:500">${sign}${fmt(diff)} (${sign}${pct} %)</div>`;
+  }
+  html+=`</div>`;
+
+  // Allocation donut
+  const cats=CATS.map(c=>({...c,value:catSum(data,c.id)})).filter(c=>c.value>0);
+  if(cats.length>0){
+    html+=`<div class="card"><div class="card-title">Répartition</div><div class="donut-wrap">`;
+    html+=buildDonut(cats,nw);
+    html+=`<div class="donut-legend">`;
+    cats.forEach(c=>{
+      html+=`<div class="legend-row"><div class="legend-left"><div class="legend-dot" style="background:${c.color}"></div>${c.label}</div><span class="legend-pct">${((c.value/nw)*100).toFixed(1)} %</span></div>`;
+    });
+    html+=`</div></div></div>`;
+  }
+
+  // Chart
+  html+=`<div class="card"><div class="card-title">Évolution</div>`;
+  if(snaps.length>1){
+    html+=buildChart(snaps);
+  } else {
+    html+=`<div class="chart-empty">Prends des snapshots dans l'onglet Historique pour voir l'évolution.</div>`;
+  }
+  html+=`</div>`;
+
+  app.innerHTML=html;
+}
+
+function buildDonut(cats,total){
+  const size=110, cx=55, cy=55, r=40, r2=28;
+  let cumul=0;
+  let paths='';
+  cats.forEach(c=>{
+    const frac=c.value/total;
+    const gap=0.01;
+    const start=cumul+gap/2;
+    const end=cumul+frac-gap/2;
+    cumul+=frac;
+    const x1=cx+r*Math.cos(2*Math.PI*start-Math.PI/2);
+    const y1=cy+r*Math.sin(2*Math.PI*start-Math.PI/2);
+    const x2=cx+r*Math.cos(2*Math.PI*end-Math.PI/2);
+    const y2=cy+r*Math.sin(2*Math.PI*end-Math.PI/2);
+    const x3=cx+r2*Math.cos(2*Math.PI*end-Math.PI/2);
+    const y3=cy+r2*Math.sin(2*Math.PI*end-Math.PI/2);
+    const x4=cx+r2*Math.cos(2*Math.PI*start-Math.PI/2);
+    const y4=cy+r2*Math.sin(2*Math.PI*start-Math.PI/2);
+    const large=frac>0.5?1:0;
+    paths+=`<path d="M${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2} L${x3} ${y3} A${r2} ${r2} 0 ${large} 0 ${x4} ${y4} Z" fill="${c.color}"/>`;
+  });
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex-shrink:0">${paths}</svg>`;
+}
+
+function buildChart(snaps){
+  const vals=snaps.map(s=>s.total);
+  const min=Math.min(...vals)*0.95;
+  const max=Math.max(...vals)*1.05;
+  const range=max-min||1;
+  const w=320, h=140, px=30, py=10;
+  const cw=w-px*2, ch=h-py*2;
+
+  let points=snaps.map((s,i)=>{
+    const x=px+(i/(snaps.length-1))*cw;
+    const y=py+ch-(((s.total-min)/range)*ch);
+    return `${x},${y}`;
+  });
+
+  const areaPoints=points.join(' ')+` ${px+cw},${py+ch} ${px},${py+ch}`;
+  const linePoints=points.join(' ');
+
+  // Y axis labels
+  let yLabels='';
+  for(let i=0;i<=3;i++){
+    const v=min+(range*i/3);
+    const y=py+ch-(i/3)*ch;
+    yLabels+=`<text x="${px-4}" y="${y+3}" text-anchor="end" fill="#475569" font-size="9">${(v/1000).toFixed(0)}k</text>`;
+    yLabels+=`<line x1="${px}" y1="${y}" x2="${px+cw}" y2="${y}" stroke="#1e293b" stroke-dasharray="3,3"/>`;
+  }
+
+  // X axis
+  let xLabels='';
+  const step=Math.max(1,Math.floor(snaps.length/4));
+  for(let i=0;i<snaps.length;i+=step){
+    const x=px+(i/(snaps.length-1))*cw;
+    const d=new Date(snaps[i].date);
+    xLabels+=`<text x="${x}" y="${h-2}" text-anchor="middle" fill="#475569" font-size="9">${d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'})}</text>`;
+  }
+
+  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto">
+    <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00d4aa" stop-opacity=".25"/><stop offset="100%" stop-color="#00d4aa" stop-opacity="0"/></linearGradient></defs>
+    ${yLabels}${xLabels}
+    <polygon points="${areaPoints}" fill="url(#ag)"/>
+    <polyline points="${linePoints}" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+// ─── Assets ───
+function renderAssets(){
+  let html=`<h2 style="font-size:22px;font-weight:800;margin-bottom:16px">Mes actifs</h2>`;
+
+  let hasAny=false;
+  CATS.forEach(cat=>{
+    const items=data.assets.filter(a=>a.category===cat.id);
+    if(!items.length) return;
+    hasAny=true;
+    const total=items.reduce((s,a)=>s+a.value,0);
+    html+=`<div class="card">
+      <div class="cat-header"><div class="cat-left"><span style="font-size:20px">${cat.icon}</span>${cat.label}</div>
+      <span class="cat-total" style="color:${cat.color}">${fmt(total)}</span></div>`;
+    items.forEach(a=>{
+      html+=`<div class="asset-row" data-edit="${a.id}">
+        <div><div class="asset-name">${a.name}</div>${a.note?`<div class="asset-note">${a.note}</div>`:''}</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="asset-val">${fmt(a.value)}</span>
+          <span data-del="${a.id}" style="color:var(--red);font-size:18px;padding:4px;cursor:pointer">✕</span>
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+
+  if(!hasAny){
+    html+=`<div class="card"><div class="chart-empty">Aucun actif. Appuie sur + pour commencer.</div></div>`;
+  }
+
+  app.innerHTML=html;
+
+  // FAB
+  const fab=document.createElement('button');
+  fab.className='btn-small';
+  fab.textContent='+';
+  fab.addEventListener('click',()=>openModal());
+  document.body.appendChild(fab);
+
+  // Event delegation
+  app.querySelectorAll('[data-edit]').forEach(el=>{
+    el.addEventListener('click',e=>{
+      if(e.target.closest('[data-del]')) return;
+      const asset=data.assets.find(a=>a.id===el.dataset.edit);
+      if(asset) openModal(asset);
+    });
+  });
+  app.querySelectorAll('[data-del]').forEach(el=>{
+    el.addEventListener('click',e=>{
+      e.stopPropagation();
+      data.assets=data.assets.filter(a=>a.id!==el.dataset.del);
+      save(data);
+      render();
+    });
+  });
+}
+
+function openModal(asset){
+  document.querySelectorAll('.modal-bg').forEach(m=>m.remove());
+  const isEdit=!!asset;
+  const bg=document.createElement('div');
+  bg.className='modal-bg';
+
+  let catOptions=CATS.map(c=>`<option value="${c.id}" ${asset&&asset.category===c.id?'selected':''}>${c.icon} ${c.label}</option>`).join('');
+
+  bg.innerHTML=`<div class="modal">
+    <h3>${isEdit?'Modifier':'Nouvel actif'}</h3>
+    <label>Nom</label>
+    <input id="m-name" placeholder="Livret A, Bitcoin, PEA..." value="${asset?asset.name:''}">
+    <label>Catégorie</label>
+    <select id="m-cat">${catOptions}</select>
+    <label>Valeur (€)</label>
+    <input id="m-val" type="number" inputmode="decimal" placeholder="0" value="${asset?asset.value:''}">
+    <label>Note (optionnel)</label>
+    <input id="m-note" placeholder="Courtier, détails..." value="${asset?asset.note||'':''}">
+    <div class="modal-actions">
+      <button class="btn-outline" id="m-cancel">Annuler</button>
+      <button class="btn-primary" id="m-save">Enregistrer</button>
+    </div>
+    ${isEdit?`<button class="btn-outline btn-danger" style="margin-top:10px" id="m-delete">Supprimer cet actif</button>`:''}
+  </div>`;
+
+  document.body.appendChild(bg);
+  bg.addEventListener('click',e=>{if(e.target===bg){bg.remove()}});
+  bg.querySelector('#m-cancel').addEventListener('click',()=>bg.remove());
+
+  bg.querySelector('#m-save').addEventListener('click',()=>{
+    const name=bg.querySelector('#m-name').value.trim();
+    const val=parseFloat(bg.querySelector('#m-val').value);
+    if(!name||isNaN(val)) return;
+    const cat=bg.querySelector('#m-cat').value;
+    const note=bg.querySelector('#m-note').value.trim();
+    if(isEdit){
+      const idx=data.assets.findIndex(a=>a.id===asset.id);
+      if(idx>=0) data.assets[idx]={...data.assets[idx],name,category:cat,value:val,note,updatedAt:today()};
+    } else {
+      data.assets.push({id:genId(),name,category:cat,value:val,note,createdAt:today(),updatedAt:today()});
+    }
+    save(data);
+    bg.remove();
+    render();
+  });
+
+  if(isEdit){
+    bg.querySelector('#m-delete').addEventListener('click',()=>{
+      data.assets=data.assets.filter(a=>a.id!==asset.id);
+      save(data);
+      bg.remove();
+      render();
+    });
+  }
+}
+
+// ─── History ───
+function renderHistory(){
+  const nw=netWorth(data);
+  const sorted=[...(data.snapshots||[])].sort((a,b)=>b.date.localeCompare(a.date));
+
+  let html=`<h2 style="font-size:22px;font-weight:800;margin-bottom:6px">Historique</h2>
+    <p style="color:var(--dim);font-size:13px;margin-bottom:16px">Prends un snapshot pour figer l'état de ton patrimoine. Le graphique du dashboard se construit avec ces points.</p>
+    <button class="btn-primary" id="snap-btn" style="margin-bottom:18px">Prendre un snapshot (${fmt(nw)})</button>`;
+
+  if(sorted.length){
+    html+=`<div class="card">`;
+    sorted.forEach((s,i)=>{
+      const prev=sorted[i+1];
+      const diff=prev?s.total-prev.total:null;
+      const c=diff!==null?(diff>=0?'var(--accent)':'var(--red)'):'';
+      const sign=diff!==null&&diff>=0?'+':'';
+      html+=`<div class="snap-row">
+        <span class="snap-date">${fmtDate(s.date)}</span>
+        <div class="snap-right">
+          ${diff!==null?`<span class="snap-diff" style="color:${c}">${sign}${fmt(diff)}</span>`:''}
+          <span class="snap-total">${fmt(s.total)}</span>
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  } else {
+    html+=`<div class="card"><div class="chart-empty">Aucun snapshot pour le moment.</div></div>`;
+  }
+
+  app.innerHTML=html;
+
+  document.getElementById('snap-btn').addEventListener('click',()=>{
+    const t=today();
+    const snap={date:t,total:nw,breakdown:CATS.map(c=>({id:c.id,value:catSum(data,c.id)}))};
+    const idx=(data.snapshots||[]).findIndex(s=>s.date===t);
+    if(!data.snapshots) data.snapshots=[];
+    if(idx>=0) data.snapshots[idx]=snap;
+    else data.snapshots.push(snap);
+    save(data);
+    render();
+  });
+}
+
+// ─── Settings ───
+function renderSettings(){
+  let html=`<h2 style="font-size:22px;font-weight:800;margin-bottom:16px">Réglages</h2>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn-outline" id="s-export">📤  Exporter (JSON)</button>
+      <button class="btn-outline" id="s-import">📥  Importer</button>
+      <button class="btn-outline btn-danger" id="s-reset">🗑  Tout réinitialiser</button>
+    </div>
+    <div style="margin-top:30px;text-align:center;color:var(--dim);font-size:11px">Patrimoine Tracker v1<br>Données stockées localement sur ton appareil.</div>`;
+
+  app.innerHTML=html;
+
+  document.getElementById('s-export').addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=`patrimoine-${today()}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  document.getElementById('s-import').addEventListener('click',()=>{
+    const input=document.createElement('input');
+    input.type='file';input.accept='.json';
+    input.onchange=e=>{
+      const f=e.target.files[0];if(!f)return;
+      f.text().then(t=>{
+        try{
+          const d=JSON.parse(t);
+          if(d.assets&&Array.isArray(d.assets)){data=d;save(data);render();}
+        }catch{alert('Fichier invalide.')}
+      });
+    };
+    input.click();
+  });
+
+  document.getElementById('s-reset').addEventListener('click',()=>{
+    if(confirm('Supprimer toutes les données ?')){
+      data={assets:[],snapshots:[]};save(data);render();
+    }
+  });
+}
+
+// ─── Init ───
+render();
+</script>
+</body>
+</html>
